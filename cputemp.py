@@ -33,11 +33,12 @@ NOTIFY_TIMEOUT = 5000
 class ThermometerAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
-        self.add_local_name("Thermometer")
+        self.add_service_uuid("0000fff0-0000-1000-8000-00805f9b34fb");
+        self.add_local_name("rpi3")
         self.include_tx_power = True
 
 class ThermometerService(Service):
-    THERMOMETER_SVC_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
+    THERMOMETER_SVC_UUID = "0000fff0-0000-1000-8000-00805f9b34fb"
 
     def __init__(self, index):
         self.farenheit = True
@@ -124,7 +125,7 @@ class TempDescriptor(Descriptor):
         return value
 
 class UnitCharacteristic(Characteristic):
-    UNIT_CHARACTERISTIC_UUID = "00000003-710e-4a5b-8d75-3e5b444bc3cf"
+    UNIT_CHARACTERISTIC_UUID = "0000fff1-0000-1000-8000-00805f9b34fb"
 
     def __init__(self, service):
         Characteristic.__init__(
@@ -134,10 +135,11 @@ class UnitCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         val = str(value[0]).upper()
-        if val == "C":
-            self.service.set_farenheit(False)
-        elif val == "F":
-            self.service.set_farenheit(True)
+        print("receive: %s" % ''.join([str(v) for v in value]))
+        #if val == "C":
+        #    self.service.set_farenheit(False)
+        #elif val == "F":
+        #    self.service.set_farenheit(True)
 
     def ReadValue(self, options):
         value = []
